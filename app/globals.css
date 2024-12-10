@@ -14,6 +14,42 @@
   }
 }
 
+@font-face {
+  font-family: 'Yasashii-W01-Bold';
+  src: url('./fonts/Yasashii-W01-Bold.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Montserrat-Bold';
+  src: url('./fonts/Montserrat-Bold.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Montserrat-Regular';
+  src: url('./fonts/Montserrat-Regular.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Montserrat-SemiBold';
+  src: url('./fonts/Montserrat-SemiBold.ttf') format('truetype');
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px); /* 아래에서 위로 올라오는 효과 */
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in {
+  opacity: 0;
+  animation: fadeIn 3s ease forwards;
+}
+
 body {
   color: var(--foreground);
   background: var(--background);
