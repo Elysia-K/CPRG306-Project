@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { db } from '../_utils/firebase'; // Firebase configuration
+import { db, auth } from '../_utils/firebase'; // Firebase configuration
 import {
   collection,
   query,
@@ -10,7 +10,6 @@ import {
   deleteDoc,
   doc,
 } from 'firebase/firestore';
-import { auth } from '../_utils/firebase'; // Firebase auth configuration
 import { onAuthStateChanged } from 'firebase/auth';
 import * as XLSX from 'xlsx'; // Import xlsx library
 
@@ -34,23 +33,25 @@ export default function Page() {
 
   useEffect(() => {
     // Firestore에서 RSVP 데이터 가져오기
-    const q = query(collection(db, 'RSVP'), orderBy('timestamp', 'desc'));
-    const unsubscribe = onSnapshot(
-      q,
-      (snapshot) => {
-        const fetchedRSVPs = snapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-        setRsvpList(fetchedRSVPs);
-      },
-      (err) => {
-        console.error('Error fetching RSVP data:', err);
-        setError('Failed to load RSVP list. Please try again later.');
-      }
-    );
+    if (typeof window !== 'undefined') {
+      const q = query(collection(db, 'RSVP'), orderBy('timestamp', 'desc'));
+      const unsubscribe = onSnapshot(
+        q,
+        (snapshot) => {
+          const fetchedRSVPs = snapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+          }));
+          setRsvpList(fetchedRSVPs);
+        },
+        (err) => {
+          console.error('Error fetching RSVP data:', err);
+          setError('Failed to load RSVP list. Please try again later.');
+        }
+      );
 
-    return () => unsubscribe(); // 컴포넌트가 언마운트되면 리스너 제거
+      return () => unsubscribe(); // 컴포넌트 언마운트 시 리스너 제거
+    }
   }, []);
 
   const handleDelete = async (id) => {
