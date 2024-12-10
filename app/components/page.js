@@ -31,8 +31,8 @@ export default function Page() {
   };
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
+    if (typeof window !== 'undefined') {
+      const observer = new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             const sectionName = entry.target.getAttribute('data-section');
@@ -41,20 +41,19 @@ export default function Page() {
             );
           }
         });
-      },
-      { threshold: 0.1 }
-    );
-
-    Object.values(sectionRefs).forEach((ref) => {
-      if (ref.current) observer.observe(ref.current);
-    });
-
-    return () => {
-      Object.values(sectionRefs).forEach((ref) => {
-        if (ref.current) observer.unobserve(ref.current);
       });
-    };
-  }, [sectionRefs]);
+
+      Object.values(sectionRefs).forEach((ref) => {
+        if (ref.current) observer.observe(ref.current);
+      });
+
+      return () => {
+        Object.values(sectionRefs).forEach((ref) => {
+          if (ref.current) observer.unobserve(ref.current);
+        });
+      };
+    }
+  }, []);
 
   useEffect(() => {
     // Firebase Auth listener for current user
