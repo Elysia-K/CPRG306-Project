@@ -54,7 +54,7 @@ export default function Page() {
         if (ref.current) observer.unobserve(ref.current);
       });
     };
-  }, []);
+  }, [sectionRefs]);
 
   useEffect(() => {
     // Firebase Auth listener for current user
@@ -69,7 +69,9 @@ export default function Page() {
   }, []);
 
   const scrollToSection = (section) => {
-    sectionRefs[section].current.scrollIntoView({ behavior: 'smooth' });
+    if (typeof window !== 'undefined') {
+      sectionRefs[section].current.scrollIntoView({ behavior: 'smooth' });
+    }
   };
 
   const handleLogout = async () => {
