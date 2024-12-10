@@ -1,13 +1,8 @@
-// Import the functions you need from the SDKs you need
 import { initializeApp } from 'firebase/app';
-import { getAnalytics } from 'firebase/analytics';
 import { getFirestore } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+// Firebase configuration
 const firebaseConfig = {
   apiKey: 'AIzaSyAyoraBUr5Rb0tzrGsqskKlctHMMQK49vo',
   authDomain: 'cprg306-project-58447.firebaseapp.com',
@@ -18,8 +13,19 @@ const firebaseConfig = {
   measurementId: 'G-S05FRX9B33',
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
 export const db = getFirestore(app);
 export const auth = getAuth(app);
+
+// Analytics 초기화는 클라이언트 환경에서만 실행
+export const initializeAnalytics = async () => {
+  if (typeof window !== 'undefined') {
+    const { getAnalytics, isSupported } = await import('firebase/analytics');
+    const supported = await isSupported();
+    if (supported) {
+      return getAnalytics(app);
+    }
+    console.log('Firebase Analytics is not supported in this environment.');
+    return null;
+  }
+};

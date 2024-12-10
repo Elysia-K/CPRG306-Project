@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { db, auth } from '../_utils/firebase'; // Firebase configuration
+import { db, auth, initializeAnalytics } from '../_utils/firebase'; // Import analytics initialization
 import {
   collection,
   query,
@@ -11,12 +11,20 @@ import {
   doc,
 } from 'firebase/firestore';
 import { onAuthStateChanged } from 'firebase/auth';
-import * as XLSX from 'xlsx'; // Import xlsx library
+import * as XLSX from 'xlsx';
 
 export default function Page() {
   const [rsvpList, setRsvpList] = useState([]);
   const [error, setError] = useState('');
   const [currentUser, setCurrentUser] = useState(null);
+
+  useEffect(() => {
+    // Firebase Analytics 초기화
+    const initialize = async () => {
+      await initializeAnalytics();
+    };
+    initialize();
+  }, []);
 
   useEffect(() => {
     // Firebase Auth 상태 감지
